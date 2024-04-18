@@ -140,6 +140,17 @@ bool my_set::_erase(node*& node_, const int key) {
 	}
 }
 
+void my_set::_print(const node* root) const {
+	if (!root) return;
+	std::cout << root->data << " ";
+	_print(root->left);
+	_print(root->right);
+}
+
+void my_set::print() const {
+	_print(_root);
+}
+
 my_set::~my_set() {
 	_clear(_root);
 	_root = nullptr;

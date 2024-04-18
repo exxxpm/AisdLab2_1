@@ -13,6 +13,7 @@ class my_set {
 	node* _copy(node* root);
 	bool _equal(const node* first, const node* second) const;
 	bool _erase(node*& node_, const int key);
+	void _print(const node* root) const;
 public:
 	my_set();
 	my_set(const int val);
@@ -29,6 +30,7 @@ public:
 	bool contains(const int key) const;
 	bool insert(const int key);
 	bool erase(const int key);
+	void print() const;
 	
 	~my_set();
 };
