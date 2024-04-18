@@ -6,6 +6,7 @@ struct node {
 	node* right;
 	node(int val, node* left, node* right);
 };
+
 class my_set {
 	node* _root;
 
@@ -23,6 +24,7 @@ public:
 	void swap(my_set& other) noexcept;
 	my_set& operator=(my_set other);
 
+	node* get_root() const;
 	int get_root_value() const;
 	bool equal(const my_set& second) const;
 	bool operator==(const my_set& second);
@@ -34,3 +36,6 @@ public:
 	
 	~my_set();
 };
+
+my_set union_of_sets(const my_set& first, const my_set& second);
+my_set symmetrical_difference(const my_set& first, const my_set& second);

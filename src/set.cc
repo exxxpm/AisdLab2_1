@@ -1,5 +1,6 @@
 #include <set.h>
 #include <iostream>
+#include <queue>
 
 node::node(int val, node* left, node* right) : data(val), left(left), right(right) {};
 
@@ -151,7 +152,62 @@ void my_set::print() const {
 	_print(_root);
 }
 
+node* my_set::get_root() const {
+	return _root;
+}
+
 my_set::~my_set() {
 	_clear(_root);
 	_root = nullptr;
+}
+
+my_set union_of_sets(const my_set& first, const my_set& second) {
+	my_set result;
+	if (!first.get_root()) {
+		result = second;
+		return result;
+	}
+	if (!second.get_root()) {
+		result = first;
+		return result;
+	}
+	std::queue<node*> queue1;
+	queue1.push(first.get_root());
+	queue1.push(second.get_root());
+	while (!queue1.empty()) {
+		auto current = queue1.front();
+		result.insert(current->data);
+		if (current->left) queue1.push(current->left);
+		if (current->right)queue1.push(current->right);
+		queue1.pop();
+	}
+	return result;
+}
+
+my_set symmetrical_difference(const my_set& first, const my_set& second) {
+	my_set result;
+	if (!first.get_root()) {
+		result = second;
+		return result;
+	}
+	if (!second.get_root()) {
+		result = first;
+		return result;
+	}
+	std::queue<node*> queue;;
+	queue.push(first.get_root());
+	queue.push(second.get_root());
+	while (!queue.empty()) {
+		auto current = queue.front();
+		if (second.contains(current->data) && first.contains(current->data)) {
+			if (current->left) queue.push(current->left);
+			if (current->right)queue.push(current->right);
+			queue.pop();
+		}
+		else result.insert(current->data);
+		if (current->left) queue.push(current->left);
+		if (current->right)queue.push(current->right);
+		queue.pop();
+	}
+	return result;
 }
