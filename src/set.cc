@@ -57,12 +57,12 @@ bool my_set::operator==(const my_set& second) {
 	return equal(second);
 }
 
-
 bool my_set::operator!=(const my_set& second) {
 	return !(*this == second);
 }
 
 int my_set::get_root_value() const {
+    //if root is null throw exception
 	return _root ? _root->data : throw std::logic_error("root is nullptr");
 }
 
@@ -80,13 +80,17 @@ bool my_set::contains(const int key) const {
 
 bool my_set::insert(const int key) {
 	auto new_node = new node(key, nullptr, nullptr);
+	//replace head if head is null
 	if (!_root) {
 		_root = new_node;
 		return true;
 	}
 	node* tmp = _root;
+	 
 	while (tmp) {
+		//if there is such a node, then we dont insert
 		if (tmp->data == key) return false;
+		//else find position for insert
 		if (tmp->data > key) {
 			if (!tmp->left) {
 				tmp->left = new_node;
@@ -113,9 +117,13 @@ bool my_set::_erase(node*& node_, const int key) {
 	if (!node_) {
 		return false;
 	}
+	// If the key is less than current node's data, 
+	//recursively call _erase on the left subtree.
 	if (key < node_->data) {
 		return _erase(node_->left, key);
 	}
+	// If the key is greater than current node's data,
+	//recursively call _erase on the right subtree.
 	else if (key > node_->data) {
 		return _erase(node_->right, key);
 	}
@@ -132,16 +140,21 @@ bool my_set::_erase(node*& node_, const int key) {
 			node_ = tmp;
 			return true;
 		}
+		// If the current node has both left and right children.
 		auto min_right = node_->right;
 		while (min_right->left) {
+			// Find the minimum node in the right subtree.
 			min_right = min_right->left;
 		}
+		// Replace the current node's data with the data of the minimum node in the right subtree.
 		node_->data = min_right->data;
+		// Recursively call _erase to remove the minimum node from the right subtree.
 		return _erase(node_->right, min_right->data);
 	}
 }
 
 void my_set::_print(const node* root) const {
+	//root -> left -> right
 	if (!root) return;
 	std::cout << root->data << " ";
 	_print(root->left);
@@ -174,6 +187,7 @@ my_set union_of_sets(const my_set& first, const my_set& second) {
 	std::queue<node*> queue1;
 	queue1.push(first.get_root());
 	queue1.push(second.get_root());
+	//insert in result all nodes
 	while (!queue1.empty()) {
 		auto current = queue1.front();
 		result.insert(current->data);
@@ -197,6 +211,7 @@ my_set symmetrical_difference(const my_set& first, const my_set& second) {
 	std::queue<node*> queue;;
 	queue.push(first.get_root());
 	queue.push(second.get_root());
+	//if the node is in both then go to the next one, else add it to the result
 	while (!queue.empty()) {
 		auto current = queue.front();
 		if (second.contains(current->data) && first.contains(current->data)) {
