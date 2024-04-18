@@ -1,3 +1,5 @@
+#include <initializer_list>
+
 struct node {
 	int data;
 	node* left;
@@ -8,11 +10,21 @@ class my_set {
 	node* _root;
 
 	void _clear(node* root);
+	node* _copy(node* root);
+	bool _equal(const node* first, const node* second) const;
 public:
 	my_set();
 	my_set(const int val);
+	my_set(const my_set& other);
+	my_set(std::initializer_list<int> values);
+
+	void swap(my_set& other) noexcept;
+	my_set& operator=(my_set other);
 
 	int get_root_value() const;
-
+	bool equal(const my_set& second) const;
+	bool operator==(const my_set& second);
+	bool insert(const int key);
+	
 	~my_set();
 };
