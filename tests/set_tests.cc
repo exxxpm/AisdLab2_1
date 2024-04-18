@@ -22,3 +22,25 @@ TEST(set_test, contains_in_tree) {
 	my_set set2{ 1,9,4 };
 	ASSERT_TRUE(set2.contains(9));
 }
+
+
+TEST(set_test, erase_item_in_tail) {
+	my_set set2{ 1,9,4 };
+	set2.erase(4);
+	my_set set1{ 1,9 };
+	ASSERT_TRUE(set1 == set2);
+}
+
+TEST(set_test, erase_item_in_middle) {
+	my_set set2{ 1,9,4 };
+	set2.erase(9);
+	my_set set1{ 1,4 };
+	ASSERT_TRUE(set1 == set2);
+}
+
+TEST(set_test, erase_item_in_head) {
+	my_set set2{ 1,9,4 };
+	set2.erase(1);
+	my_set set1{ 9,4 };
+	ASSERT_TRUE(set1 == set2);
+}
