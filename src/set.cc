@@ -56,8 +56,25 @@ bool my_set::operator==(const my_set& second) {
 	return equal(second);
 }
 
+
+bool my_set::operator!=(const my_set& second) {
+	return !(*this == second);
+}
+
 int my_set::get_root_value() const {
 	return _root ? _root->data : throw std::logic_error("root is nullptr");
+}
+
+bool my_set::contains(const int key) const {
+	node* tmp = _root;
+	while (tmp) {
+		if (tmp->data == key) return true;
+		if (tmp->data > key) {
+			tmp = tmp->left;
+		}
+		else tmp = tmp->right;
+	}
+	return false;
 }
 
 bool my_set::insert(const int key) {

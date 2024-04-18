@@ -17,3 +17,8 @@ TEST(set_test, overloaded_equal) {
 	my_set set1 = set2;
 	ASSERT_TRUE(set1 == set2);
 }
+
+TEST(set_test, contains_in_tree) {
+	my_set set2{ 1,9,4 };
+	ASSERT_TRUE(set2.contains(9));
+}

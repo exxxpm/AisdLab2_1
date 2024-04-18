@@ -24,6 +24,8 @@ public:
 	int get_root_value() const;
 	bool equal(const my_set& second) const;
 	bool operator==(const my_set& second);
+	bool operator!=(const my_set& second);
+	bool contains(const int key) const;
 	bool insert(const int key);
 	
 	~my_set();
