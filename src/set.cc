@@ -153,6 +153,22 @@ bool my_set::_erase(node*& node_, const int key) {
 	}
 }
 
+void my_set::walk(const node* other, std::vector<int>& vec) {
+	if (!other) {
+		return;
+	}
+	walk(other->left, vec);
+	vec.push_back(other->data);
+	walk(other->right, vec);
+}
+
+std::vector<int> my_set::to_vector() const {
+	std::vector <int> convert;
+	walk(_root, convert);
+	convert.push_back(_root->data);
+	return convert;
+}
+
 void my_set::_print(const node* root) const {
 	//root -> left -> right
 	if (!root) return;
@@ -165,9 +181,9 @@ void my_set::print() const {
 	_print(_root);
 }
 
-node* my_set::get_root() const {
-	return _root;
-}
+//node* my_set::get_root() const {
+//	return _root;
+//}
 
 my_set::~my_set() {
 	_clear(_root);
@@ -175,54 +191,56 @@ my_set::~my_set() {
 }
 
 my_set union_of_sets(const my_set& first, const my_set& second) {
-	my_set result;
-	if (!first.get_root()) {
-		result = second;
-		return result;
-	}
-	if (!second.get_root()) {
-		result = first;
-		return result;
-	}
-	std::queue<node*> queue1;
-	queue1.push(first.get_root());
-	queue1.push(second.get_root());
-	//insert in result all nodes
-	while (!queue1.empty()) {
-		auto current = queue1.front();
-		result.insert(current->data);
-		if (current->left) queue1.push(current->left);
-		if (current->right)queue1.push(current->right);
-		queue1.pop();
+	my_set result = first;  
+	for (auto el : second.to_vector()) {
+		result.insert(el);
 	}
 	return result;
 }
-
 my_set symmetrical_difference(const my_set& first, const my_set& second) {
 	my_set result;
-	if (!first.get_root()) {
-		result = second;
-		return result;
-	}
-	if (!second.get_root()) {
-		result = first;
-		return result;
-	}
-	std::queue<node*> queue;;
-	queue.push(first.get_root());
-	queue.push(second.get_root());
-	//if the node is in both then go to the next one, else add it to the result
-	while (!queue.empty()) {
-		auto current = queue.front();
-		if (second.contains(current->data) && first.contains(current->data)) {
-			if (current->left) queue.push(current->left);
-			if (current->right)queue.push(current->right);
-			queue.pop();
+	auto vfirst = first.to_vector();
+	auto vsecond = second.to_vector();
+
+	for (auto el : vfirst) {
+		if (!second.contains(el)) {
+			result.insert(el);
 		}
-		else result.insert(current->data);
-		if (current->left) queue.push(current->left);
-		if (current->right)queue.push(current->right);
-		queue.pop();
+	}
+
+	for (auto el : vsecond) {
+		if (!first.contains(el)) {
+			result.insert(el);
+		}
 	}
 	return result;
 }
+//
+//my_set symmetrical_difference(const my_set& first, const my_set& second) {
+//	my_set result;
+//	if (!first.get_root()) {
+//		result = second;
+//		return result;
+//	}
+//	if (!second.get_root()) {
+//		result = first;
+//		return result;
+//	}
+//	std::queue<node*> queue;;
+//	queue.push(first.get_root());
+//	queue.push(second.get_root());
+//	//if the node is in both then go to the next one, else add it to the result
+//	while (!queue.empty()) {
+//		auto current = queue.front();
+//		if (second.contains(current->data) && first.contains(current->data)) {
+//			if (current->left) queue.push(current->left);
+//			if (current->right)queue.push(current->right);
+//			queue.pop();
+//		}
+//		else result.insert(current->data);
+//		if (current->left) queue.push(current->left);
+//		if (current->right)queue.push(current->right);
+//		queue.pop();
+//	}
+//	return result;
+//}

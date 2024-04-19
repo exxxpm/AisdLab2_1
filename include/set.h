@@ -1,5 +1,5 @@
 #include <initializer_list>
-
+#include <vector>
 struct node {
 	int data;
 	node* left;
@@ -24,7 +24,9 @@ public:
 	void swap(my_set& other) noexcept;
 	my_set& operator=(my_set other);
 
-	node* get_root() const;
+	//node* get_root() const;
+	std::vector<int> to_vector() const;
+	static void walk(const node* other, std::vector<int>& vec);
 	int get_root_value() const;
 	bool equal(const my_set& second) const;
 	bool operator==(const my_set& second);
